@@ -33,12 +33,38 @@ FreeDNS migration needs particular care: the replacement's FreeDNS v2 token is
 not interchangeable with the legacy `dynamic/update.php` key. See the generic
 [migration and retirement notes](docs/retirement.md) before switching updaters.
 
-## Historical source
+## How it works (legacy usage)
 
 The original [PowerShell script](src/update-freedns.ps1) remains available unchanged.
 It has known limitations, including HTTP defaults and ineffective `-WhatIf`
 protection. It is not recommended for new deployments. See the
 [legacy reference](docs/legacy-reference.md) for details.
+
+Run the following examples from the repository root in Windows PowerShell,
+replacing the synthetic domain and key with your own legacy FreeDNS settings.
+The script checks your public IP against the domain's DNS answer and requests an
+update when they differ.
+
+By default, it writes a log file under `logs` in the current working directory.
+Create that directory before calling the script:
+
+```powershell
+New-Item -ItemType Directory -Path ".\logs" -Force | Out-Null
+.\src\update-freedns.ps1 -Domain "sub.example.com" -Key "YOUR_LEGACY_UPDATE_KEY"
+```
+
+Another log folder can be selected with `-LogFolder`; create that folder first:
+
+```powershell
+New-Item -ItemType Directory -Path "C:\Example\FreeDNS\logs" -Force | Out-Null
+.\src\update-freedns.ps1 -Domain "sub.example.com" -Key "YOUR_LEGACY_UPDATE_KEY" -LogFolder "C:\Example\FreeDNS\logs"
+```
+
+These are historical usage examples. The legacy script's default update endpoint
+uses HTTP; its `-UpdateBase` parameter can override that URL, but public-IP
+discovery also uses HTTP. `-WhatIf` does not prevent a real update. Read the
+[known limitations](docs/legacy-reference.md#known-limitations) before using an
+existing installation.
 
 The source keeps its existing [GNU GPL v3 license](LICENSE). The repository's
 Git history remains available; archival does not require deleting it.
