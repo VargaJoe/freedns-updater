@@ -1,0 +1,14 @@
+# Private transfer packages: never stage, commit or publish
+/local-deployment/
+
+# Existing local editor and repository notes
+/.vscode/
+/.github/*.md
+
+# Defensive exclusions for accidental runtime/configuration files
+/pilot/ddns-updater/secrets/
+/pilot/ddns-updater/data/
+/pilot/ddns-updater/.env
+/logs/
+.env
+.env.*
